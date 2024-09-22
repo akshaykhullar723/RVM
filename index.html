@@ -1,0 +1,1667 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (navigator.userAgent.match(/MSIE|Internet Explorer/i) || navigator.userAgent.match(/Trident\/7\..*?rv:11/i)) {
+            var href = document.location.href;
+            if (!href.match(/[?&]nowprocket/)) {
+                if (href.indexOf("?") == -1) {
+                    if (href.indexOf("#") == -1) {
+                        document.location.href = href + "?nowprocket=1"
+                    } else {
+                        document.location.href = href.replace("#", "?nowprocket=1#")
+                    }
+                } else {
+                    if (href.indexOf("#") == -1) {
+                        document.location.href = href + "&nowprocket=1"
+                    } else {
+                        document.location.href = href.replace("#", "&nowprocket=1#")
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        (() => {
+            class RocketLazyLoadScripts {
+                constructor() {
+                    this.v = "1.2.6", this.triggerEvents = ["keydown", "mousedown", "mousemove", "touchmove", "touchstart", "touchend", "wheel"], this.userEventHandler = this.t.bind(this), this.touchStartHandler = this.i.bind(this), this.touchMoveHandler = this.o.bind(this), this.touchEndHandler = this.h.bind(this), this.clickHandler = this.u.bind(this), this.interceptedClicks = [], this.interceptedClickListeners = [], this.l(this), window.addEventListener("pageshow", (t => {
+                        this.persisted = t.persisted, this.everythingLoaded && this.m()
+                    })), this.CSPIssue = sessionStorage.getItem("rocketCSPIssue"), document.addEventListener("securitypolicyviolation", (t => {
+                        this.CSPIssue || "script-src-elem" !== t.violatedDirective || "data" !== t.blockedURI || (this.CSPIssue = !0, sessionStorage.setItem("rocketCSPIssue", !0))
+                    })), document.addEventListener("DOMContentLoaded", (() => {
+                        this.k()
+                    })), this.delayedScripts = {
+                        normal: [],
+                        async: [],
+                        defer: []
+                    }, this.trash = [], this.allJQueries = []
+                }
+                p(t) {
+                    document.hidden ? t.t() : (this.triggerEvents.forEach((e => window.addEventListener(e, t.userEventHandler, {
+                        passive: !0
+                    }))), window.addEventListener("touchstart", t.touchStartHandler, {
+                        passive: !0
+                    }), window.addEventListener("mousedown", t.touchStartHandler), document.addEventListener("visibilitychange", t.userEventHandler))
+                }
+                _() {
+                    this.triggerEvents.forEach((t => window.removeEventListener(t, this.userEventHandler, {
+                        passive: !0
+                    }))), document.removeEventListener("visibilitychange", this.userEventHandler)
+                }
+                i(t) {
+                    "HTML" !== t.target.tagName && (window.addEventListener("touchend", this.touchEndHandler), window.addEventListener("mouseup", this.touchEndHandler), window.addEventListener("touchmove", this.touchMoveHandler, {
+                        passive: !0
+                    }), window.addEventListener("mousemove", this.touchMoveHandler), t.target.addEventListener("click", this.clickHandler), this.L(t.target, !0), this.S(t.target, "onclick", "rocket-onclick"), this.C())
+                }
+                o(t) {
+                    window.removeEventListener("touchend", this.touchEndHandler), window.removeEventListener("mouseup", this.touchEndHandler), window.removeEventListener("touchmove", this.touchMoveHandler, {
+                        passive: !0
+                    }), window.removeEventListener("mousemove", this.touchMoveHandler), t.target.removeEventListener("click", this.clickHandler), this.L(t.target, !1), this.S(t.target, "rocket-onclick", "onclick"), this.M()
+                }
+                h() {
+                    window.removeEventListener("touchend", this.touchEndHandler), window.removeEventListener("mouseup", this.touchEndHandler), window.removeEventListener("touchmove", this.touchMoveHandler, {
+                        passive: !0
+                    }), window.removeEventListener("mousemove", this.touchMoveHandler)
+                }
+                u(t) {
+                    t.target.removeEventListener("click", this.clickHandler), this.L(t.target, !1), this.S(t.target, "rocket-onclick", "onclick"), this.interceptedClicks.push(t), t.preventDefault(), t.stopPropagation(), t.stopImmediatePropagation(), this.M()
+                }
+                O() {
+                    window.removeEventListener("touchstart", this.touchStartHandler, {
+                        passive: !0
+                    }), window.removeEventListener("mousedown", this.touchStartHandler), this.interceptedClicks.forEach((t => {
+                        t.target.dispatchEvent(new MouseEvent("click", {
+                            view: t.view,
+                            bubbles: !0,
+                            cancelable: !0
+                        }))
+                    }))
+                }
+                l(t) {
+                    EventTarget.prototype.addEventListenerWPRocketBase = EventTarget.prototype.addEventListener, EventTarget.prototype.addEventListener = function(e, i, o) {
+                        "click" !== e || t.windowLoaded || i === t.clickHandler || t.interceptedClickListeners.push({
+                            target: this,
+                            func: i,
+                            options: o
+                        }), (this || window).addEventListenerWPRocketBase(e, i, o)
+                    }
+                }
+                L(t, e) {
+                    this.interceptedClickListeners.forEach((i => {
+                        i.target === t && (e ? t.removeEventListener("click", i.func, i.options) : t.addEventListener("click", i.func, i.options))
+                    })), t.parentNode !== document.documentElement && this.L(t.parentNode, e)
+                }
+                D() {
+                    return new Promise((t => {
+                        this.P ? this.M = t : t()
+                    }))
+                }
+                C() {
+                    this.P = !0
+                }
+                M() {
+                    this.P = !1
+                }
+                S(t, e, i) {
+                    t.hasAttribute && t.hasAttribute(e) && (event.target.setAttribute(i, event.target.getAttribute(e)), event.target.removeAttribute(e))
+                }
+                t() {
+                    this._(this), "loading" === document.readyState ? document.addEventListener("DOMContentLoaded", this.R.bind(this)) : this.R()
+                }
+                k() {
+                    let t = [];
+                    document.querySelectorAll("script[type=rocketlazyloadscript][data-rocket-src]").forEach((e => {
+                        let i = e.getAttribute("data-rocket-src");
+                        if (i && !i.startsWith("data:")) {
+                            0 === i.indexOf("//") && (i = location.protocol + i);
+                            try {
+                                const o = new URL(i).origin;
+                                o !== location.origin && t.push({
+                                    src: o,
+                                    crossOrigin: e.crossOrigin || "module" === e.getAttribute("data-rocket-type")
+                                })
+                            } catch (t) {}
+                        }
+                    })), t = [...new Map(t.map((t => [JSON.stringify(t), t]))).values()], this.T(t, "preconnect")
+                }
+                async R() {
+                    this.lastBreath = Date.now(), this.j(this), this.F(this), this.I(), this.W(), this.q(), await this.A(this.delayedScripts.normal), await this.A(this.delayedScripts.defer), await this.A(this.delayedScripts.async);
+                    try {
+                        await this.U(), await this.H(this), await this.J()
+                    } catch (t) {
+                        console.error(t)
+                    }
+                    window.dispatchEvent(new Event("rocket-allScriptsLoaded")), this.everythingLoaded = !0, this.D().then((() => {
+                        this.O()
+                    })), this.N()
+                }
+                W() {
+                    document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((t => {
+                        t.hasAttribute("data-rocket-src") ? t.hasAttribute("async") && !1 !== t.async ? this.delayedScripts.async.push(t) : t.hasAttribute("defer") && !1 !== t.defer || "module" === t.getAttribute("data-rocket-type") ? this.delayedScripts.defer.push(t) : this.delayedScripts.normal.push(t) : this.delayedScripts.normal.push(t)
+                    }))
+                }
+                async B(t) {
+                    if (await this.G(), !0 !== t.noModule || !("noModule" in HTMLScriptElement.prototype)) return new Promise((e => {
+                        let i;
+
+                        function o() {
+                            (i || t).setAttribute("data-rocket-status", "executed"), e()
+                        }
+                        try {
+                            if (navigator.userAgent.indexOf("Firefox/") > 0 || "" === navigator.vendor || this.CSPIssue) i = document.createElement("script"), [...t.attributes].forEach((t => {
+                                let e = t.nodeName;
+                                "type" !== e && ("data-rocket-type" === e && (e = "type"), "data-rocket-src" === e && (e = "src"), i.setAttribute(e, t.nodeValue))
+                            })), t.text && (i.text = t.text), i.hasAttribute("src") ? (i.addEventListener("load", o), i.addEventListener("error", (function() {
+                                i.setAttribute("data-rocket-status", "failed-network"), e()
+                            })), setTimeout((() => {
+                                i.isConnected || e()
+                            }), 1)) : (i.text = t.text, o()), t.parentNode.replaceChild(i, t);
+                            else {
+                                const i = t.getAttribute("data-rocket-type"),
+                                    s = t.getAttribute("data-rocket-src");
+                                i ? (t.type = i, t.removeAttribute("data-rocket-type")) : t.removeAttribute("type"), t.addEventListener("load", o), t.addEventListener("error", (i => {
+                                    this.CSPIssue && i.target.src.startsWith("data:") ? (console.log("WPRocket: data-uri blocked by CSP -> fallback"), t.removeAttribute("src"), this.B(t).then(e)) : (t.setAttribute("data-rocket-status", "failed-network"), e())
+                                })), s ? (t.removeAttribute("data-rocket-src"), t.src = s) : t.src = "data:text/javascript;base64," + window.btoa(unescape(encodeURIComponent(t.text)))
+                            }
+                        } catch (i) {
+                            t.setAttribute("data-rocket-status", "failed-transform"), e()
+                        }
+                    }));
+                    t.setAttribute("data-rocket-status", "skipped")
+                }
+                async A(t) {
+                    const e = t.shift();
+                    return e && e.isConnected ? (await this.B(e), this.A(t)) : Promise.resolve()
+                }
+                q() {
+                    this.T([...this.delayedScripts.normal, ...this.delayedScripts.defer, ...this.delayedScripts.async], "preload")
+                }
+                T(t, e) {
+                    var i = document.createDocumentFragment();
+                    t.forEach((t => {
+                        const o = t.getAttribute && t.getAttribute("data-rocket-src") || t.src;
+                        if (o && !o.startsWith("data:")) {
+                            const s = document.createElement("link");
+                            s.href = o, s.rel = e, "preconnect" !== e && (s.as = "script"), t.getAttribute && "module" === t.getAttribute("data-rocket-type") && (s.crossOrigin = !0), t.crossOrigin && (s.crossOrigin = t.crossOrigin), t.integrity && (s.integrity = t.integrity), i.appendChild(s), this.trash.push(s)
+                        }
+                    })), document.head.appendChild(i)
+                }
+                j(t) {
+                    let e = {};
+
+                    function i(i, o) {
+                        return e[o].eventsToRewrite.indexOf(i) >= 0 && !t.everythingLoaded ? "rocket-" + i : i
+                    }
+
+                    function o(t, o) {
+                        ! function(t) {
+                            e[t] || (e[t] = {
+                                originalFunctions: {
+                                    add: t.addEventListener,
+                                    remove: t.removeEventListener
+                                },
+                                eventsToRewrite: []
+                            }, t.addEventListener = function() {
+                                arguments[0] = i(arguments[0], t), e[t].originalFunctions.add.apply(t, arguments)
+                            }, t.removeEventListener = function() {
+                                arguments[0] = i(arguments[0], t), e[t].originalFunctions.remove.apply(t, arguments)
+                            })
+                        }(t), e[t].eventsToRewrite.push(o)
+                    }
+
+                    function s(e, i) {
+                        let o = e[i];
+                        e[i] = null, Object.defineProperty(e, i, {
+                            get: () => o || function() {},
+                            set(s) {
+                                t.everythingLoaded ? o = s : e["rocket" + i] = o = s
+                            }
+                        })
+                    }
+                    o(document, "DOMContentLoaded"), o(window, "DOMContentLoaded"), o(window, "load"), o(window, "pageshow"), o(document, "readystatechange"), s(document, "onreadystatechange"), s(window, "onload"), s(window, "onpageshow");
+                    try {
+                        Object.defineProperty(document, "readyState", {
+                            get: () => t.rocketReadyState,
+                            set(e) {
+                                t.rocketReadyState = e
+                            },
+                            configurable: !0
+                        }), document.readyState = "loading"
+                    } catch (t) {
+                        console.log("WPRocket DJE readyState conflict, bypassing")
+                    }
+                }
+                F(t) {
+                    let e;
+
+                    function i(e) {
+                        return t.everythingLoaded ? e : e.split(" ").map((t => "load" === t || 0 === t.indexOf("load.") ? "rocket-jquery-load" : t)).join(" ")
+                    }
+
+                    function o(o) {
+                        function s(t) {
+                            const e = o.fn[t];
+                            o.fn[t] = o.fn.init.prototype[t] = function() {
+                                return this[0] === window && ("string" == typeof arguments[0] || arguments[0] instanceof String ? arguments[0] = i(arguments[0]) : "object" == typeof arguments[0] && Object.keys(arguments[0]).forEach((t => {
+                                    const e = arguments[0][t];
+                                    delete arguments[0][t], arguments[0][i(t)] = e
+                                }))), e.apply(this, arguments), this
+                            }
+                        }
+                        o && o.fn && !t.allJQueries.includes(o) && (o.fn.ready = o.fn.init.prototype.ready = function(e) {
+                            return t.domReadyFired ? e.bind(document)(o) : document.addEventListener("rocket-DOMContentLoaded", (() => e.bind(document)(o))), o([])
+                        }, s("on"), s("one"), t.allJQueries.push(o)), e = o
+                    }
+                    o(window.jQuery), Object.defineProperty(window, "jQuery", {
+                        get: () => e,
+                        set(t) {
+                            o(t)
+                        }
+                    })
+                }
+                async H(t) {
+                    const e = document.querySelector("script[data-webpack]");
+                    e && (await async function() {
+                        return new Promise((t => {
+                            e.addEventListener("load", t), e.addEventListener("error", t)
+                        }))
+                    }(), await t.K(), await t.H(t))
+                }
+                async U() {
+                    this.domReadyFired = !0;
+                    try {
+                        document.readyState = "interactive"
+                    } catch (t) {}
+                    await this.G(), document.dispatchEvent(new Event("rocket-readystatechange")), await this.G(), document.rocketonreadystatechange && document.rocketonreadystatechange(), await this.G(), document.dispatchEvent(new Event("rocket-DOMContentLoaded")), await this.G(), window.dispatchEvent(new Event("rocket-DOMContentLoaded"))
+                }
+                async J() {
+                    try {
+                        document.readyState = "complete"
+                    } catch (t) {}
+                    await this.G(), document.dispatchEvent(new Event("rocket-readystatechange")), await this.G(), document.rocketonreadystatechange && document.rocketonreadystatechange(), await this.G(), window.dispatchEvent(new Event("rocket-load")), await this.G(), window.rocketonload && window.rocketonload(), await this.G(), this.allJQueries.forEach((t => t(window).trigger("rocket-jquery-load"))), await this.G();
+                    const t = new Event("rocket-pageshow");
+                    t.persisted = this.persisted, window.dispatchEvent(t), await this.G(), window.rocketonpageshow && window.rocketonpageshow({
+                        persisted: this.persisted
+                    }), this.windowLoaded = !0
+                }
+                m() {
+                    document.onreadystatechange && document.onreadystatechange(), window.onload && window.onload(), window.onpageshow && window.onpageshow({
+                        persisted: this.persisted
+                    })
+                }
+                I() {
+                    const t = new Map;
+                    document.write = document.writeln = function(e) {
+                        const i = document.currentScript;
+                        i || console.error("WPRocket unable to document.write this: " + e);
+                        const o = document.createRange(),
+                            s = i.parentElement;
+                        let n = t.get(i);
+                        void 0 === n && (n = i.nextSibling, t.set(i, n));
+                        const c = document.createDocumentFragment();
+                        o.setStart(c, 0), c.appendChild(o.createContextualFragment(e)), s.insertBefore(c, n)
+                    }
+                }
+                async G() {
+                    Date.now() - this.lastBreath > 45 && (await this.K(), this.lastBreath = Date.now())
+                }
+                async K() {
+                    return document.hidden ? new Promise((t => setTimeout(t))) : new Promise((t => requestAnimationFrame(t)))
+                }
+                N() {
+                    this.trash.forEach((t => t.remove()))
+                }
+                static run() {
+                    const t = new RocketLazyLoadScripts;
+                    t.p(t)
+                }
+            }
+            RocketLazyLoadScripts.run()
+        })();
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+
+    <link rel="preload" href="https://use.typekit.net/rek0ipz.css" as="style">
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+
+    <!-- Google Tag Manager -->
+    <script type="rocketlazyloadscript">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-NVQQLCK');
+    </script>
+
+    <link rel="preconnect" href="https://www.canamenterprises.com/wp-content/uploads/2024/01/canam-homepage-hero-smaller.webp">
+    <link rel="preload" as="image" href="https://www.canamenterprises.com/wp-content/uploads/2024/01/canam-homepage-hero-smaller.webp">
+
+    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+    <!-- This site is optimized with the Yoast SEO Premium plugin v23.4 (Yoast SEO v23.4) - https://yoast.com/wordpress/plugins/seo/ -->
+    <title>RVM International</title>
+    <link rel="preload" data-rocket-preload as="style" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700&#038;family=Sofia&#038;display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700&#038;family=Sofia&#038;display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700&#038;family=Sofia&#038;display=swap" /></noscript>
+    <link rel="preload" data-rocket-preload as="image" href="https://www.canamenterprises.com/wp-content/uploads/2024/01/canam-homepage-hero-smaller.webp"
+        fetchpriority="high">
+    <meta name="description" content="RVM International is a leading full-service financial firm specializing in the Immigrant Program. We help you with Best Visa investments." />
+    <link rel="canonical" href="https://www.canamenterprises.com/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EB-5 Visa Investment Projects | RVM International" />
+    <meta property="og:description" content="RVM International is a leading full-service financial firm specializing in the Immigration services. We help you with best Visa investments." />
+    <meta property="og:url" content="https://www.canamenterprises.com/" />
+    <meta property="og:site_name" content="RVM International" />
+    <meta property="article:modified_time" content="2024-07-31T20:57:25+00:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" class="yoast-schema-graph">
+        {
+            "@context": "https://schema.org",
+            "@graph": [{
+                "@type": "WebPage",
+                "@id": "https://www.canamenterprises.com/",
+                "url": "https://www.canamenterprises.com/",
+                "name": "EB-5 Visa Investment Projects | RVM International",
+                "isPartOf": {
+                    "@id": "https://www.canamenterprises.com/#website"
+                },
+                "datePublished": "2023-11-15T19:07:59+00:00",
+                "dateModified": "2024-07-31T20:57:25+00:00",
+                "description": "RVM International is a leading full-service financial firm specializing in the EB-5 Immigrant Investor Program. We help you with EB-5 Visa investments.",
+                "breadcrumb": {
+                    "@id": "https://www.canamenterprises.com/#breadcrumb"
+                },
+                "inLanguage": "en-US",
+                "potentialAction": [{
+                    "@type": "ReadAction",
+                    "target": ["https://www.canamenterprises.com/"]
+                }]
+            }, {
+                "@type": "BreadcrumbList",
+                "@id": "https://www.canamenterprises.com/#breadcrumb",
+                "itemListElement": [{
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Homepage"
+                }]
+            }, {
+                "@type": "WebSite",
+                "@id": "https://www.canamenterprises.com/#website",
+                "url": "https://www.canamenterprises.com/",
+                "name": "RVM International",
+                "description": "",
+                "potentialAction": [{
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://www.canamenterprises.com/?s={search_term_string}"
+                    },
+                    "query-input": {
+                        "@type": "PropertyValueSpecification",
+                        "valueRequired": true,
+                        "valueName": "search_term_string"
+                    }
+                }],
+                "inLanguage": "en-US"
+            }]
+        }
+    </script>
+    <meta name="msvalidate.01" content="A015AF8C805E1838B4EAD057B750099E" />
+    <meta name="google-site-verification" content="9BHbzudCyWaHKI_8M5lNqyG_YxrQbBLRb1BKqO54yX8" />
+    <meta name="yandex-verification" content="0006c24e63364b7d" />
+    <!-- / Yoast SEO Premium plugin. -->
+
+
+    <link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+    <link rel="alternate" type="application/rss+xml" title="RVM International &raquo; Feed" href="#" />
+    <link rel="alternate" type="application/rss+xml" title="RVM International &raquo; Comments Feed" href="#" />
+    <style id='wp-emoji-styles-inline-css'>
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 0.07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <style id='safe-svg-svg-icon-style-inline-css'>
+        .safe-svg-cover {
+            text-align: center
+        }
+
+        .safe-svg-cover .safe-svg-inside {
+            display: inline-block;
+            max-width: 100%
+        }
+
+        .safe-svg-cover svg {
+            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            width: 100%
+        }
+    </style>
+    <link rel='stylesheet' id='mediaelement-css' href='https://www.canamenterprises.com/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css?ver=4.2.17' media='all' />
+    <link rel='stylesheet' id='wp-mediaelement-css' href='https://www.canamenterprises.com/wp-includes/js/mediaelement/wp-mediaelement.min.css?ver=6.5.5' media='all' />
+    <style id='jetpack-sharing-buttons-style-inline-css'>
+        .jetpack-sharing-buttons__services-list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0;
+            list-style-type: none;
+            margin: 5px;
+            padding: 0
+        }
+
+        .jetpack-sharing-buttons__services-list.has-small-icon-size {
+            font-size: 12px
+        }
+
+        .jetpack-sharing-buttons__services-list.has-normal-icon-size {
+            font-size: 16px
+        }
+
+        .jetpack-sharing-buttons__services-list.has-large-icon-size {
+            font-size: 24px
+        }
+
+        .jetpack-sharing-buttons__services-list.has-huge-icon-size {
+            font-size: 36px
+        }
+
+        @media print {
+            .jetpack-sharing-buttons__services-list {
+                display: none !important
+            }
+        }
+
+        .editor-styles-wrapper .wp-block-jetpack-sharing-buttons {
+            gap: 0;
+            padding-inline-start: 0
+        }
+
+        ul.jetpack-sharing-buttons__services-list.has-background {
+            padding: 1.25em 2.375em
+        }
+    </style>
+    <link rel='stylesheet' id='wpml-legacy-dropdown-0-css' href='https://www.canamenterprises.com/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-dropdown/style.min.css?ver=1' media='all' />
+    <link rel='stylesheet' id='canam-style-css' href='https://www.canamenterprises.com/wp-content/cache/busting/1/wp-content/themes/canam_wp_theme-main/style.css' media='all' />
+    <script id="wpml-cookie-js-extra">
+        var wpml_cookies = {
+            "wp-wpml_current_language": {
+                "value": "en",
+                "expires": 1,
+                "path": "\/"
+            }
+        };
+        var wpml_cookies = {
+            "wp-wpml_current_language": {
+                "value": "en",
+                "expires": 1,
+                "path": "\/"
+            }
+        };
+    </script>
+    <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/plugins/sitepress-multilingual-cms/res/js/cookies/language-cookie.js?ver=4.6.11" id="wpml-cookie-js" defer data-wp-strategy="defer"></script>
+    <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-dropdown/script.min.js?ver=1" id="wpml-legacy-dropdown-0-js"></script>
+    <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/themes/canam_wp_theme-main/js/navigation.js?ver=1726860708" id="canam-navigation-js" defer data-wp-strategy="defer"></script>
+    <script id="canam-script-js-extra">
+        var ajaxurl = "https:\/\/www.canamenterprises.com\/wp-admin\/admin-ajax.php";
+    </script>
+    <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/themes/canam_wp_theme-main/js/script.js?ver=1726860708" id="canam-script-js" defer data-wp-strategy="defer"></script>
+    <link rel="https://api.w.org/" href="https://www.canamenterprises.com/wp-json/" />
+    <link rel="alternate" type="application/json" href="https://www.canamenterprises.com/wp-json/wp/v2/pages/146" />
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.canamenterprises.com/xmlrpc.php?rsd" />
+    <link rel='shortlink' href='https://www.canamenterprises.com/' />
+    <link rel="alternate" type="application/json+oembed" href="https://www.canamenterprises.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.canamenterprises.com%2F" />
+    <link rel="alternate" type="text/xml+oembed" href="https://www.canamenterprises.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.canamenterprises.com%2F&#038;format=xml" />
+    <meta name="generator" content="WPML ver:4.6.11 stt:61,1,41,2;" />
+    <link rel="icon" href="images/canam-favicon-logo-32x32.png" sizes="32x32" />
+    <link rel="icon" href="images/canam-favicon-logo-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="images/canam-favicon-logo-180x180.png" />
+
+    <meta name="msapplication-TileImage" content="https://www.canamenterprises.com/wp-content/uploads/2023/12/cropped-canam-favicon-logo-1-270x270.png" />
+    <noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript>
+
+    <script type="rocketlazyloadscript" data-rocket-src=<script type="rocketlazyloadscript" data-rocket-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrVSnUWwOmPBbBGjOhlCw_KiVNcs1X3nM&callback=initMap" defer></script>
+    <script type="rocketlazyloadscript"> const path = 'https://www.canamenterprises.com/wp-content/themes/canam_wp_theme-main'; </script>
+    
+
+
+</head>
+
+<body class="home page-template-default page page-id-146">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NVQQLCK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+
+
+    <div id="page" class="site">
+        <a class="skip-link screen-reader-text" href="#primary">Skip to content</a>
+
+        <header id="masthead" class="site-header">
+
+            <div class="header__container mini-menu">
+
+                <div class="wpml-ls-statics-shortcode_actions wpml-ls wpml-ls-legacy-dropdown js-wpml-ls-legacy-dropdown">
+                    <ul>
+
+                        <li tabindex="0" class="wpml-ls-slot-shortcode_actions wpml-ls-item wpml-ls-item-en wpml-ls-current-language wpml-ls-item-legacy-dropdown">
+                            <a href="#" class="js-wpml-ls-item-toggle wpml-ls-item-toggle">
+                                                    <img
+            class="wpml-ls-flag"
+            src="https://www.canamenterprises.com/wp-content/uploads/flags/us.svg"
+            alt=""
+            width=18
+            height=12
+    /><span class="wpml-ls-native"></span></a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+                    </ul>
+                </div>
+                |
+                <a class="login" target="_blank" href="#">Log In</a> |
+                <a class="openSearch" href="#siteSearch" aria-label="Open search window">
+					<svg width="13px" x="0px" y="0px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" aria-hidden="true"><g stroke="none" strokewidth="1" fill="#fff" fillrule="evenodd"><path d="M3 10.5C3 6.364 6.364 3 10.5 3S18 6.364 18 10.5 14.636 18 10.5 18 3 14.636 3 10.5m20.562 10.941l-4.661-4.661C20.213 15.027 21 12.858 21 10.5 21 4.701 16.298 0 10.5 0 4.7 0 0 4.701 0 10.5 0 16.298 4.7 21 10.5 21c2.358 0 4.527-.787 6.28-2.098l4.661 4.66c.292.291.677.438 1.06.438.386 0 .77-.147 1.061-.438.584-.584.584-1.539 0-2.121"></path></g></svg>
+				</a>
+            </div>
+
+            <div id="siteSearch">
+                <button class="close_button" type="button" aria-label="Clear search window"><svg x="0px" y="0px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" aria-hidden="true"><g stroke="none" strokewidth="1" fill="#ffffff" fillrule="evenodd"><path d="M18.643128,20.7643515 C19.228878,21.3502515 20.178678,21.3502515 20.764428,20.7643515 C21.350178,20.1786015 21.350178,19.2288015 20.764428,18.6430515 L14.121378,12.0000015 L20.764428,5.3569065 C21.350178,4.7711115 21.350178,3.8213715 20.764428,3.2355765 C20.178678,2.6497965 19.228878,2.6497965 18.643128,3.2355765 L12.000018,9.8786715 L5.356893,3.2355465 C4.771098,2.6497515 3.821358,2.6497515 3.235563,3.2355465 C2.649783,3.8213265 2.649783,4.7710815 3.235563,5.3568615 L9.878703,12.0000015 L3.235578,18.6430515 C2.649783,19.2289515 2.649783,20.1786015 3.235578,20.7645015 C3.821358,21.3502515 4.771113,21.3502515 5.356893,20.7645015 L12.000018,14.1213165 L18.643128,20.7643515 Z"></path></g></svg></button>
+                <form id="live-search-form" action="" method="get">
+                    <h2>What are you looking for?</h2>
+                    <div class="all-wrapper">
+                        <div class="input-wrapper">
+                            <input type="text" id="live-search-input" name="s" placeholder="Search" autocomplete="off">
+
+                            <button id="live-clear-input" class="clear_button" type="button" aria-label="Clear search input"><svg x="0px" y="0px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" aria-hidden="true"><g stroke="none" strokewidth="1" fill="#000000" fillrule="evenodd"><path d="M18.643128,20.7643515 C19.228878,21.3502515 20.178678,21.3502515 20.764428,20.7643515 C21.350178,20.1786015 21.350178,19.2288015 20.764428,18.6430515 L14.121378,12.0000015 L20.764428,5.3569065 C21.350178,4.7711115 21.350178,3.8213715 20.764428,3.2355765 C20.178678,2.6497965 19.228878,2.6497965 18.643128,3.2355765 L12.000018,9.8786715 L5.356893,3.2355465 C4.771098,2.6497515 3.821358,2.6497515 3.235563,3.2355465 C2.649783,3.8213265 2.649783,4.7710815 3.235563,5.3568615 L9.878703,12.0000015 L3.235578,18.6430515 C2.649783,19.2289515 2.649783,20.1786015 3.235578,20.7645015 C3.821358,21.3502515 4.771113,21.3502515 5.356893,20.7645015 L12.000018,14.1213165 L18.643128,20.7643515 Z"></path></g></svg></button>
+                        </div>
+
+                        <input id="live-lang-input" type="hidden" name="lang" value="en">
+
+                        <div data-searching="Searching..." data-results="No results found. " id="live-search-results"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="header__container">
+                <a href="#" id="site-branding" class="site-branding">
+                    <img 
+                    src="images\yy.png" 
+                    alt="RVM International" 
+                    width="444" 
+                    height="51">
+				<img
+					src="images\rvm1.webp" 
+					alt="CanAm Enterprise" 
+					width="462" 
+					height="51">
+			</a>
+                <!-- .site-branding -->
+                <nav id="site-navigation" class="main-navigation">
+                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+					Primary Menu					<span></span>
+				</button>
+                    <div class="menu-menu-container">
+                        <ul id="primary-menu" class="menu nav-menu loaded">
+                            <li id="menu-item-20120" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-146 current_page_item current-menu-ancestor current-menu-parent current_page_parent current_page_ancestor menu-item-has-children menu-item-20120"><a href="https://www.canamenterprises.com/" aria-current="page">Home</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-20121" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-20121"><a href="#results" aria-current="page">Our Track Record</a></li>
+                                    <li id="menu-item-20122" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-20122"><a href="#testimonials" aria-current="page">Our Clients</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-240" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-240"><a href="#">Company</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-241" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-241"><a href="#/">About us</a></li>
+                                    <li id="menu-item-242" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-242"><a href="#">Our team</a></li>
+                                    <li id="menu-item-21908" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-21908"><a href="#">Hear From Our Clients</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-243" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-243"><a href="#">Apply job</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-245" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-245"><a href="#"> Visa Program</a></li>
+                                    <li id="menu-item-244" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-244"><a href="#">Concurrent Filing</a></li>
+                                    <li id="menu-item-22095" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-22095"><a href="#">Frequently Asked Questions</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-246" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-246"><a href="#">Study Visa</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-248" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-248"><a href="#">Past RVM Projects</a></li>
+                                    <li id="menu-item-247" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-247"><a href="#">Current Offerings</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-249" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-249"><a href="#">Work Permit</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-252" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-252"><a href="#">News &#038; Insights</a></li>
+                                    <li id="menu-item-251" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251"><a href="#">Videos</a></li>
+                                    <li id="menu-item-250" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-250"><a href="#">RVM Glossary</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-253" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-253"><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <!-- #site-navigation -->
+            </div>
+        </header>
+        <!-- #masthead -->
+
+        <main id="primary" class="site-main homepage">
+
+            <!--hero-->
+           
+<section class="hero" style="background-image: url('images/canam-homepage-hero-smaller.webp');">
+    <div class="hero__container">
+        <h1 class="hero__title">Transform Your Life Abroad  Trust the Experts</h1>
+        <p class="hero__paragraph">"New Horizons, New Beginnings – Let’s Start the Journey!"</p>
+        <a href="#steps" class="hero__cta">LEARN MORE</a>
+    </div>
+</section>
+
+            <!-- Banner Section -->
+    <section class="banner">
+        <div class="banner__items">
+            <div class="banner__item">
+                <span class="banner__item-figure" data-target="5000">0+</span>
+                <p class="banner__item-paragraph">Successful Overseas <br>Job Placements</p>
+            </div>
+            <div class="banner__item">
+                <span class="banner__item-figure" data-target="10000">0+</span>
+                <p class="banner__item-paragraph">Study Visas Approved </p>
+            </div>
+            <div class="banner__item">
+                <span class="banner__item-figure" data-target="6000">0+</span>
+                <p class="banner__item-paragraph">Work Permits Granted**</p>
+            </div>
+            <div class="banner__item">
+                <span class="banner__item-figure" data-target="98">0%</span>
+                <p class="banner__item-paragraph">Visa Success Rate</p>
+            </div>
+        </div>
+    </section>
+            <!--split-->
+            <section class="split video" id="video" style="background-color: #FFFFFF">
+                <div class="split__container ">
+                    <!-- Code for the text container -->
+                    <div class="split__text-container">
+                        <h2 class="split__title title">RVM International: <br><span>Guaranteed Visas, High Success Rates</span></h2>
+                        <p class="split__paragraph">RVM International is committed to providing top-tier immigration services with a track record of success. Discover how our expertise and dedication make the difference for clients worldwide.</p>
+                    </div>
+                    <!-- Code for the bullets content type -->
+                    <!-- Code for the figures content type -->
+                    <!-- Code for the image content type -->
+                    <!-- Code for the schema content type -->
+                    <!-- Code for the video content type -->
+                    <div class="split__content-video">
+                        <div style="padding:56.25% 0 0 0;position:relative;">
+                            <iframe loading="lazy" src="images/v.mp4" type="video/mp4" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="RVM International 20th Anniversary"></iframe>
+                            <noscript>
+                                <iframe src="images/v.mp4" type="video/mp4"> frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="RVM International 20th Anniversary"></iframe>
+                            </noscript>
+                        </div>
+                        <script type="rocketlazyloadscript" data-rocket-src="images/v.mp4" type="video/mp4"></script>
+                    </div>
+                    
+            </section>
+            <!--split-->
+            <section class="split figures" id="figures" style="background-color: #f5f6f7">
+                <div class="split__container ">
+                    <!-- Code for the text container -->
+                    <div class="split__text-container">
+                        <p class="split__subtitle subtitle">Our Assurance</p>
+                        <h2 class="split__title title">Your Trust. Our Expertise.<br>Your Investment. <span>Your Future.</span></h2>
+                        <p class="split__paragraph">RVM International assists foreign investors and professionals in obtaining U.S. visas and work permits. We offer personalized support throughout the entire process, ensuring all requirements are met for smooth, timely approvals. Our expert team is committed to making your path to residency and employment in the U.S. efficient and secure.</p>
+                        <a href="#testimonials" class="split__cta cta">MORE ABOUT US</a>
+                    </div>
+                    <!-- Code for the bullets content type -->
+                    <!-- Code for the figures content type -->
+                    <div class="split__content-figures">
+                        <p class="split__content-figures-title">Minimal Requirements ¹</p>
+                        <div class="split__content-figures-items">
+                            <div class="split__content-figures-item">
+                                <p class="split__content-figures-item-title">With/Without - IELTS</p>
+                                <p class="split__content-figures-item-paragraph">Minimum Investment</p>
+                            </div>
+                            <div class="split__content-figures-item">
+                                <p class="split__content-figures-item-title">10</p>
+                                <p class="split__content-figures-item-paragraph">UNiversities per student</p>
+                            </div>
+                        </div>
+                        <a href="https://www.uscis.gov/working-in-the-united-states/permanent-workers/eb-5-immigrant-investor-program" target="_blank" class="split__content-figures-source">¹.U.S. Citizenship and Immigration Services</a>
+                    </div>
+                    <!-- Code for the image content type -->
+                    <!-- Code for the schema content type -->
+                    <!-- Code for the video content type -->
+                    <!-- Code for the paragraph content type -->
+                </div>
+            </section>
+            <!--split-->
+            <section class="split image" id="image" style="background-color: #FFFFFF">
+                <div class="split__container reverse">
+                    <!-- Code for the text container -->
+                    <div class="split__text-container">
+                        <h2 class="split__title title">What We Offer</h2>
+                        <p class="split__paragraph">RVM International specializes in providing comprehensive visa services for students and professionals seeking to study or work abroad.
+                            <br>
+                            <br>  We facilitate the visa application process, offer expert guidance on work permits, and ensure a seamless experience for immigrants aiming for new opportunities in major countries.</p>
+                        <a href="#testimonials" class="split__cta cta">EXPLORE RVM’S PATH TO SUCCESS</a>
+                    </div>
+                    <!-- Code for the bullets content type -->
+                    <!-- Code for the figures content type -->
+                    <!-- Code for the image content type -->
+                    <div class="split__content-image">
+                        <img loading="lazy" src="https://www.canamenterprises.com/wp-content/uploads/2024/01/canam-what-we-offer-img.webp" alt="" width="945" height="732" class="split__content-image-image">
+                    </div>
+                    <!-- Code for the schema content type -->
+                    <!-- Code for the video content type -->
+                    <!-- Code for the paragraph content type -->
+                </div>
+            </section>
+            <!--split-->
+            <section class="split bullets" id="bullets" style="background-color: #f5f6f7">
+                <div class="split__container ">
+                    <!-- Code for the text container -->
+                    <div class="split__text-container">
+                        <p class="split__subtitle subtitle">NEW</p>
+                        <h2 class="split__title title">Concurrent Filing: <br>VISA in the<span> United States</span></h2>
+                        <a href="#testimonials" class="split__cta cta">SEE IF YOU QUALIFY</a>
+                    </div>
+                    <!-- Code for the bullets content type -->
+                    <div class="split__content-bullets">
+                        <p class="split__content-bullets-paragraph">Explore the benefits today! You may be eligible for:</p>
+                        <div class="split__content-bullets-items">
+                            <div class="split__content-bullets-item">
+                                <img loading="lazy" src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-gold-check-icon.svg" alt="" class="split__content-bullets-item-image">
+                                <div class="split__content-bullets-item-text-container">
+                                    <p class="split__content-bullets-item-title">VISA Authorization Document</p>
+                                    <p class="split__content-bullets-item-paragraph">Work in the U.S. for any employer without sponsorship</p>
+                                </div>
+                            </div>
+                            <div class="split__content-bullets-item">
+                                <img loading="lazy" src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-gold-check-icon.svg" alt="" class="split__content-bullets-item-image">
+                                <div class="split__content-bullets-item-text-container">
+                                    <p class="split__content-bullets-item-title">Travel Permit</p>
+                                    <p class="split__content-bullets-item-paragraph">Travel within and outside of the U.S. freely</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Code for the figures content type -->
+                    <!-- Code for the image content type -->
+                    <!-- Code for the schema content type -->
+                    <!-- Code for the video content type -->
+                    <!-- Code for the paragraph content type -->
+                </div>
+            </section>
+            <!--split-->
+            <section class="split schema" id="schema" style="background-color: #ffffff">
+                <div class="split__container ">
+                    <!-- Code for the text container -->
+                    <div class="split__text-container">
+                        <p class="split__subtitle subtitle">WHY CHOOSE RVM</p>
+                        <h2 class="split__title title">Your Success is Our<br> Priority</h2>
+                        <p class="split__paragraph">At RVM, we understand that immigrating to the U.S. is a life-changing decision. We are here as your partner to guide you through every step of the way. From your initial consultation, to understanding your investments and navigating
+                            the complexities of the immigration process, we’re by your side with client-focused service, and unwavering support.
+                            <br>
+                            <br> We recognize that your investment is about securing your family’s future and that is why we take a prudent approach to the RVM process. With over 35 years of experience, our team meticulously selects projects we believe
+                            will preserve your investment capital and achieve your immigration goals. Each project is chosen as if they were for our own family.</p>
+                        <a href="#testimonials" class="split__cta cta">READ OUR GUIDE</a>
+                    </div>
+                    <!-- Code for the bullets content type -->
+                    <!-- Code for the figures content type -->
+                    <!-- Code for the image content type -->
+                    <!-- Code for the schema content type -->
+                    <div class="split__content-schema">
+                        <img loading="lazy" src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-guide-process-img.webp" alt="" height="931" width="595" class="split__content-schema-image">
+                    </div>
+                    <!-- Code for the video content type -->
+                    <!-- Code for the paragraph content type -->
+                </div>
+            </section>
+            <!--results-->
+            <section class="results" id="results">
+                <div class="results__container">
+                    <div class="results__text-container">
+                        <div class="results__title-container">
+                            <p class="results__subtitle subtitle">OUR RESULTS</p>
+                            <h2 class="results__title title">Audited* Track Record by the Numbers:</h2>
+                        </div>
+                        <p class="results__paragraph">Compare RVM’s capital repayment record against any other regional center and see why thousands of immigrant investor families have decided to put their  journeys into our hands.</p>
+                    </div>
+                    <div class="results__items">
+                        <div class="results__item">
+                            <p class="results__item-title">1000+</p>
+                            <p class="results__item-paragraph">Work Permits</p>
+                        </div>
+                        <div class="results__item">
+                            <p class="results__item-title">500+</p>
+                            <p class="results__item-paragraph">Green cards</p>
+                        </div>
+                        <div class="results__item">
+                            <p class="results__item-title">5000+</p>
+                            <p class="results__item-paragraph">Study Visa</p>
+                        </div>
+                        <div class="results__item">
+                            <p class="results__item-title">10,200+</p>
+                            <p class="results__item-paragraph">VIsa Approvals</p>
+                        </div>
+                        <div class="results__item">
+                            <p class="results__item-title">2,600+</p>
+                            <p class="results__item-paragraph">I-829 Approvals</p>
+                        </div>
+                        <div class="results__item">
+                            <p class="results__item-title">650+</p>
+                            <p class="results__item-paragraph">Setteled Families</p>
+                        </div>
+                    </div>
+                    <a href="#" target="_blank" class="results__source">Data Audited by PFK as of December 31, 2023*</a>
+                </div>
+            </section>
+            <!--steps-->
+            <section class="steps" id="steps">
+                <div class="steps__container">
+                    <div class="steps__text-container">
+                        <h2 class="steps__title title">How to Apply</h2>
+                        <p class="steps__paragraph">Our Team will guide you through the entirety of your Travel journey.</p>
+                    </div>
+                    <div class="steps__items">
+                        <div class="steps__item">
+                            <p class="steps__item-subtitle">STEP 1</p>
+                            <p class="steps__item-title">Connect With Us</p>
+                            <p class="steps__item-paragraph">Get started on your Green Card journey by connecting with us.</p>
+                        </div>
+                        <div class="steps__item">
+                            <p class="steps__item-subtitle">STEP 2</p>
+                            <p class="steps__item-title">Review and Submit</p>
+                            <p class="steps__item-paragraph">Review essential offering documents and submit your I-526E petition with our guidance.</p>
+                        </div>
+                        <div class="steps__item">
+                            <p class="steps__item-subtitle">STEP 3</p>
+                            <p class="steps__item-title">Prepare for Interview</p>
+                            <p class="steps__item-paragraph">Prepare thoroughly for your Consulate Interview with professional assistance from us.</p>
+                        </div>
+                        <div class="steps__item">
+                            <p class="steps__item-subtitle">STEP 4</p>
+                            <p class="steps__item-title">Submit I-829 Petition</p>
+                            <p class="steps__item-paragraph">Successfully achieve permanent U.S. residency by submitting your I-829 petition with our support.</p>
+                        </div>
+                   
+                    </div>
+                    <a href="#" class="steps__cta cta" id="contact-us-btn">CONTACT US</a>
+                </div>
+            </section>
+            
+            <dialog id="contact-popup">
+                <button class="dialog-close"></button>
+            <section class="contact">
+                <div class="contact__container">
+                    <div class="contact__text-container">
+                        <p class="contact__subtitle subtitle">GET IN TOUCH</p>
+                        <h2 class="contact__title title">Start Your Visa Journey With Us Today</h2>
+                        <p class="contact__paragraph">Fill out the form below and our team will get back to you shortly.</p>
+        
+                        <form action="https://formspree.io/f/xdknrdol" method="POST">
+                            <div style="margin-bottom: 15px;">
+                                <label for="first-name" style="font-size: 16px; font-weight: bold;">First Name:</label><br>
+                                <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="last-name" style="font-size: 16px; font-weight: bold;">Last Name:</label><br>
+                                <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="email" style="font-size: 16px; font-weight: bold;">Email:</label><br>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="state" style="font-size: 16px; font-weight: bold;">State:</label><br>
+                                <input type="text" id="state" name="state" placeholder="Enter your state" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="phone" style="font-size: 16px; font-weight: bold;">Indian Number:</label><br>
+                                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="query-related" style="font-size: 16px; font-weight: bold;">Query Related To:</label><br>
+                                <input type="text" id="query-related" name="query-related" placeholder="Enter query subject" 
+                                       style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label for="message" style="font-size: 16px; font-weight: bold;">Message:</label><br>
+                                <textarea id="message" name="message" rows="5" placeholder="Enter your message" 
+                                          style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                            </div>
+                            <button type="submit" 
+                                    style="background-color: #FF4C4C; color: white; padding: 10px 20px; font-size: 14px; border: none; border-radius: 0; cursor: pointer;">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                    <div class="contact__info-container">
+                        
+                        <div class="contact__map-container">
+                            <!-- Place the iframe here -->
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!d13814.856781879285!2d76.3341414!3d30.0450563!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3911d11c0596651f%3A0xe9ba01df5cd1773f!2sRVM%20INTERNATIONAL!5e0!3m2!1sen!2sin!4v1726971874838!5m2!1sen!2sin" 
+                            allowfullscreen 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        
+            
+                            <div class="contact__info-items-container">
+                                <div class="contact__info-item">
+                                    <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-address-icon.svg" alt="" class="contact__info-item-image">
+                                    <p class="contact__info-item-title">OUR ADDRESS</p>
+                                    <p class="contact__info-item-paragraph"> plot no.7 – near axis bank kaithalroad<br> cheeka, Haryana, India</p>
+                                </div>
+                                <div class="contact__info-item">
+                                    <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-phone-icon.svg" alt="" class="contact__info-item-image">
+                                    <p class="contact__info-item-title">OUR PHONE NUMBER</p>
+                                    <p class="contact__info-item-paragraph"><a href="tel:+91 903-435-4900">+91 903-435-4900</a><br>
+                                        <a href="tel:+91 903-435-4900">+91 903-435-4900 </a></p>
+                                </div>
+                                <div class="contact__info-item">
+                                    <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-hours-icon.svg" alt="" class="contact__info-item-image">
+                                    <p class="contact__info-item-title">OUR OFFICE HOURS</p>
+                                    <p class="contact__info-item-paragraph">Monday-Friday: 9am to 5pm</p>
+                                </div>
+                                <div class="contact__info-item">
+                                    <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-email-icon.svg" alt="" class="contact__info-item-image">
+                                    <p class="contact__info-item-title">OUR EMAIL</p>
+                                    <p class="contact__info-item-paragraph"><a href="mailto:Khullarakshay723@gmail.com">Khullarakshay723@gmail.com</a><br>
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                    </div>
+                </div>
+        
+                            
+            </dialog>
+            
+            <script>
+                document.getElementById('contact-us-btn').addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default anchor click behavior
+                    document.getElementById('contact-popup').showModal(); // Open the dialog
+                });
+            </script>
+
+            <!--newsletter-->
+            <section class="newsletter">
+                <div class="newsletter__container">
+                    <div class="newsletter__text-container">
+                        <h2 class="newsletter__title title">Join Our Newsletter</h2>
+                        <p class="newsletter__paragraph">Sign up to receive emails for the latest news our RVM Visa Program.</p>
+                    </div>
+                    <div class="newsletter__form-container">
+
+                        <div class="wpcf7 no-js" id="wpcf7-f8-o1" lang="en-US" dir="ltr">
+                            <div class="screen-reader-response">
+                                <p role="status" aria-live="polite" aria-atomic="true"></p>
+                                <ul></ul>
+                            </div>
+                            <form action="/#wpcf7-f8-o1" method="post" class="wpcf7-form init newsletter" aria-label="Contact form" novalidate="novalidate" data-status="init">
+                                <div style="display: none;">
+                                    <input type="hidden" name="_wpcf7" value="8" />
+                                    <input type="hidden" name="_wpcf7_version" value="5.9.8" />
+                                    <input type="hidden" name="_wpcf7_locale" value="en_US" />
+                                    <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f8-o1" />
+                                    <input type="hidden" name="_wpcf7_container_post" value="0" />
+                                    <input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+                                    <input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+                                </div>
+                                <p><span class="wpcf7-form-control-wrap" data-name="email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Enter your email" value="" type="email" name="email" /></span><br
+                                    />
+                                    <input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Sign Up" />
+                                </p>
+                                <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_source" />
+                                <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_medium" />
+                                <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_campaign" />
+                                <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_term" />
+                                <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="gclid" />
+                                <div class="wpcf7-response-output" aria-hidden="true"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--logos-->
+            <section class="logos">
+                <div class="logos__items">
+                    <div class="logos__item">
+                        <a href="#" target="_blank" class="logos__item-link">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/cxo-logo.webp"
+                            alt=""
+                            width="252"
+                            height="62"
+                            >
+                                            </a>
+                    </div>
+                    <div class="logos__item">
+                        <a href="#">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/financial-express-logo.webp"
+                            alt=""
+                            width="482"
+                            height="57"
+                            >
+                                            </a>
+                    </div>
+                    <div class="logos__item">
+                        <a href="#">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/the-economic-times-logo.webp"
+                            alt=""
+                            width="528"
+                            height="58"
+                            >
+                                            </a>
+                    </div>
+                    <div class="logos__item">
+                        <a href="#">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/toi-logo.webp"
+                            alt=""
+                            width="81"
+                            height="81"
+                            >
+                                            </a>
+                    </div>
+                    <div class="logos__item">
+                        <a href="#">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/wealth-management-logo.webp"
+                            alt=""
+                            width="353"
+                            height="64"
+                            >
+                                            </a>
+                    </div>
+                    <div class="logos__item">
+                        <a href="#">
+                                                    <img class="logos__item-image" 
+                            loading="lazy"
+                            src="https://www.canamenterprises.com/wp-content/uploads/2024/01/techgig-logo.webp"
+                            alt=""
+                            width="220"
+                            height="62"
+                            >
+                                            </a>
+                    </div>
+                </div>
+            </section>
+            <!--testimonials-->
+            <section class="testimonials " id="testimonials">
+                <div class="testimonials__container">
+                    <div class="testimonials__text-container">
+                        <p class="testimonials__subtitle subtitle">What we do ³</p>
+                        <h2 class="testimonials__title title">Watch the video if you skipped above</h2>
+                        <div class="testimonials_text">
+                            <div style="padding:56.25% 0 0 0;position:relative;"><iframe loading="lazy" src="about:blank" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hear From Our Investors" data-rocket-lazyload="fitvidscompatible"
+                                    data-lazy-src="images/v.mp4" type="images/v.mp4" type="video/mp4" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hear From Our Investors"></iframe></noscript></div>
+                            <script
+                                type="rocketlazyloadscript" data-rocket-src="images/v.mp4" type="video/mp4"></script>
+                        </div>
+                    </div>
+                    <div class="testimonials__slider-container">
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">“RVM’s team worked very hard to make sure our application was very thorough. We received reports about the status of our investment regularly.”</p>
+                            <p class="testimonials__item-author">INVESTOR</p>
+                            <p class="testimonials__item-location">Temple University Project</p>
+                        </div>
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">“RVM’s team was always responsive and proactively keep things updated whenever requested.”</p>
+                            <p class="testimonials__item-author">INVESTOR, MR. M</p>
+                            <p class="testimonials__item-location">Miamicentral Project</p>
+                        </div>
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">“Because of you all at CanAm, I am actually living my dream and I have no more words to express my gratitude. “</p>
+                            <p class="testimonials__item-author">INVESTOR, MR. C</p>
+                            <p class="testimonials__item-location">All Aboard Florida Project</p>
+                        </div>
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">"CanAm has set an astonishing example by returning the amount back in this despairing and chaotic pandemic situation where the entire industry is suffering dramatically."</p>
+                            <p class="testimonials__item-author">INVESTOR, MRS. CH</p>
+                            <p class="testimonials__item-location">All Aboard Florida Project</p>
+                        </div>
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">"During a turbulent economy and some rapid changes in RVM legislation interpretation, CanAm proved to be the best Visa company. I was kept up to date consistently with the progress of my VISA/green card, and I never worried
+                                about the security or return of my investment."</p>
+                            <p class="testimonials__item-author">Investor, MR. B</p>
+                            <p class="testimonials__item-location">PA Conventional Center</p>
+                        </div>
+                        <div class="testimonials__slider">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-ratings-icon.svg" alt="" width="122" height="18" class="testimonials__slide-image">
+                            <p class="testimonials__item-paragraph">"I would like to thank CanAm for your excellent work, reliable and trustworthy ability and long-lasting supports to the partners. It was a great experience to work with you."</p>
+                            <p class="testimonials__item-author">Investor, MR. Y</p>
+                            <p class="testimonials__item-location">PCC Project</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- CTA Banner Section -->
+<section class="cta-banner" style="background-image: url('https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-cta-bg.webp')">
+    <div class="cta-banner__container">
+        <h2 class="cta-banner__title title">Start Your <span>Rvm Journey</span> With Us Today</h2>
+        <p class="cta-banner__paragraph">Get in touch with our team of licensed investment experts.</p>
+        <a href="#" class="cta-banner__cta cta" id="cta-contact-us-btn">CONTACT US</a>
+    </div>
+</section>
+
+<!-- Dialog for Contact Form -->
+<dialog id="contact-popup">
+    <button class="dialog-close"></button>
+    <section class="contact">
+        <div class="contact__container">
+            <div class="contact__text-container">
+                <p class="contact__subtitle subtitle">GET IN TOUCH</p>
+                <h2 class="contact__title title">Start Your RVM Visa Journey With Us Today</h2>
+                <p class="contact__paragraph">Fill out the form below and our team will get back to you shortly.</p>
+
+                <form action="https://formspree.io/f/xdknrdol" method="POST">
+                    <div style="margin-bottom: 15px;">
+                        <label for="first-name" style="font-size: 16px; font-weight: bold;">First Name:</label><br>
+                        <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="last-name" style="font-size: 16px; font-weight: bold;">Last Name:</label><br>
+                        <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="email" style="font-size: 16px; font-weight: bold;">Email:</label><br>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="state" style="font-size: 16px; font-weight: bold;">State:</label><br>
+                        <input type="text" id="state" name="state" placeholder="Enter your state" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="phone" style="font-size: 16px; font-weight: bold;">Indian Number:</label><br>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="query-related" style="font-size: 16px; font-weight: bold;">Query Related To:</label><br>
+                        <input type="text" id="query-related" name="query-related" placeholder="Enter query subject" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="message" style="font-size: 16px; font-weight: bold;">Message:</label><br>
+                        <textarea id="message" name="message" rows="5" placeholder="Enter your message" 
+                                  style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                    </div>
+                    <button type="submit" 
+                            style="background-color: #FF4C4C; color: white; padding: 10px 20px; font-size: 14px; border: none; border-radius: 0; cursor: pointer;">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div class="contact__info-container">
+                <!-- Your contact information code here -->
+            </div>
+        </div>
+    </section>
+</dialog>
+
+<script>
+    // Function to show the contact dialog
+    function showContactDialog(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        document.getElementById('contact-popup').showModal(); // Open the dialog
+    }
+
+    // Add event listener to the "CONTACT US" link
+    document.getElementById('cta-contact-us-btn').addEventListener('click', showContactDialog);
+</script>
+
+        </main>
+        <!-- #main -->
+
+        <footer id="colophon" class="site-footer">
+            <div class="footer__container">
+                <div class="footer__info-container">
+                    <div class="footer__nav-container">
+                        <div class="footer__company-info">
+                            <img loading="lazy" src="images\yy.png" alt="" class="footer__logo">
+                            <p class="footer__address"> Plot no.7 – near axis bank  <br> kaithalroad, cheeka, Haryana, India</p>
+                            <a href="tel:+1%20212-668-0692" class="footer__phone-cta"> +91 9034-354-900</a>
+                        </div>
+                        <div class="footer__menu-1-items">
+                            <a href="#" class="footer__menu-1-item">About us</a>
+                            <a href="#" class="footer__menu-1-item">Our team</a>
+                            <a href="#" class="footer__menu-1-item">Contact Us</a>
+                            <a href="#/" class="footer__menu-1-item">RVM Visa Program</a>
+                            <a href="#" class="footer__menu-1-item">RVM Concurrent Filing</a>
+                        </div>
+                        <div class="footer__menu-2-items">
+                            <a href="#" class="footer__menu-2-item">Current RVM Offering</a>
+                            <a href="#" class="footer__menu-2-item">Past RVM Projects</a>
+                            <a href="#" class="footer__menu-2-item">News & Insights</a>
+                            <a href="#" class="footer__menu-2-item">Videos</a>
+                            <a href="#" class="footer__menu-2-item">RVM Glossary</a>
+                            <a href="#" class="footer__menu-2-item">Borrowers</a>
+                        </div>
+                        <div class="footer__newsletter">
+                            <p class="footer__newsletter-title">JOIN OUR NEWSLETTER</p>
+                            <div class="footer__newsletter-contact-form-link">
+
+
+                                <div class="wpcf7 no-js" id="wpcf7-f8-o2" lang="en-US" dir="ltr">
+                                    <div class="screen-reader-response">
+                                        <p role="status" aria-live="polite" aria-atomic="true"></p>
+                                        <ul></ul>
+                                    </div>
+                                    <form action="/#wpcf7-f8-o2" method="post" class="wpcf7-form init newsletter" aria-label="Contact form" novalidate="novalidate" data-status="init">
+                                        <div style="display: none;">
+                                            <input type="hidden" name="_wpcf7" value="8" />
+                                            <input type="hidden" name="_wpcf7_version" value="5.9.8" />
+                                            <input type="hidden" name="_wpcf7_locale" value="en_US" />
+                                            <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f8-o2" />
+                                            <input type="hidden" name="_wpcf7_container_post" value="0" />
+                                            <input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+                                            <input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+                                        </div>
+                                        <p><span class="wpcf7-form-control-wrap" data-name="email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Enter your email" value="" type="email" name="email" /></span><br
+                                            />
+                                            <input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Sign Up" />
+                                        </p>
+                                        <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_source" />
+                                        <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_medium" />
+                                        <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_campaign" />
+                                        <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="utm_term" />
+                                        <input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="gclid" />
+                                        <div class="wpcf7-response-output" aria-hidden="true"></div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <p class="footer__newsletter-paragraph">Sign up to receive emails for the latest news on CanAm matters and Visa Program.</p>
+                        </div>
+                    </div>
+                    <div class="footer__disclaimer-container">
+                        <div class="footer__disclaimer">
+                            <p>*No offer to sell any security is made by this website. Offerings will be made pursuant to exemptions from registration requirements set out in applicable securities laws. Prospective investors should take note of the risk
+                                factors described therein. Past performance is not indicative of future results.</p>
+                            <p>**Corresponding to 2600+ I-829 Approvals</p>
+                            <p><sup>1</sup> U.S. Citizenship and Immigration Services</p>
+                            <p><sup>2</sup> Specific investments described herein do not represent all investment decisions made by RVM International. The reader should not assume that investment decisions identified and discussed were or will be profitable.
+                                Specific investment advice references provided herein are for illustrative purposes only and are not necessarily representative of investments that will be made in the future.</p>
+                            <p><sup>3</sup> This testimonial is given by a current or former client; Cash/non-cash compensation was not provided in exchange for this testimonial.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer__rights-container">
+                    <div class="footer__copyrights-container footer__copyrights">
+                        <p>RVM International All rights reserved.</p>
+                        <p>Designed and Developed by <a href="https://websolution-gules.vercel.app/" target="_blank" rel="noopener">Akshay khullar</a></p>
+                        <a href="https://websolution-gules.vercel.app/" class="footer__privacy">Privacy Policy</a>
+                    </div>
+                    <div class="footer__social-items">
+                        <a href="https://www.linkedin.com" target="_blank" class="footer__social-item-link">
+								<img 	src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-linkedin-icon.svg" 
+										alt="" 
+										width="43" 
+										height="43" 
+										class="footer__social-item-icon">
+							</a>
+                        <a href="https://www.facebook.com/" target="_blank" class="footer__social-item-link">
+								<img 	src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-facebook-icon.svg" 
+										alt="" 
+										width="43" 
+										height="43" 
+										class="footer__social-item-icon">
+							</a>
+                        <a href="https://twitter.com/" target="_blank" class="footer__social-item-link">
+								<img 	src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-twitter-icon.svg" 
+										alt="" 
+										width="43" 
+										height="43" 
+										class="footer__social-item-icon">
+							</a>
+                        <a href="#" target="_blank" class="footer__social-item-link">
+								<img 	src="https://www.canamenterprises.com/wp-content/uploads/2023/11/canam-wechat-icon.svg" 
+										alt="" 
+										width="43" 
+										height="43" 
+										class="footer__social-item-icon">
+							</a>
+                    </div>
+                    <div class="footer__wechat-modal">
+                        <p class="footer__wechat-title">Scan the QR code to follow us on WeChat.</p>
+                        <img loading="lazy" src="https://www.canamenterprises.com/wp-content/uploads/2023/12/WeChatQRCode.gif" alt="" class="footer__wechat-qr-code-image">
+                        <button class="footer__wechat-modal-close"></button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="intercom_placeholer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg>
+    </div>
+
+    <dialog id="contact-popup">
+        <button class="dialog-close"></button>
+    <section class="contact">
+        <div class="contact__container">
+            <div class="contact__text-container">
+                <p class="contact__subtitle subtitle">GET IN TOUCH</p>
+                <h2 class="contact__title title">Start Your Visa Journey With Us Today</h2>
+                <p class="contact__paragraph">Fill out the form below and our team will get back to you shortly.</p>
+
+                <form action="https://formspree.io/f/xdknrdol" method="POST">
+                    <div style="margin-bottom: 15px;">
+                        <label for="first-name" style="font-size: 16px; font-weight: bold;">First Name:</label><br>
+                        <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="last-name" style="font-size: 16px; font-weight: bold;">Last Name:</label><br>
+                        <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="email" style="font-size: 16px; font-weight: bold;">Email:</label><br>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="state" style="font-size: 16px; font-weight: bold;">State:</label><br>
+                        <input type="text" id="state" name="state" placeholder="Enter your state" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="phone" style="font-size: 16px; font-weight: bold;">Indian Number:</label><br>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="query-related" style="font-size: 16px; font-weight: bold;">Query Related To:</label><br>
+                        <input type="text" id="query-related" name="query-related" placeholder="Enter query subject" 
+                               style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="message" style="font-size: 16px; font-weight: bold;">Message:</label><br>
+                        <textarea id="message" name="message" rows="5" placeholder="Enter your message" 
+                                  style="width: 100%; padding: 10px; font-size: 14px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                    </div>
+                    <button type="submit" 
+                            style="background-color: #FF4C4C; color: white; padding: 10px 20px; font-size: 14px; border: none; border-radius: 0; cursor: pointer;">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div class="contact__info-container">
+                <div class="contact__map-container map"></div>
+    
+                    <div class="contact__info-items-container">
+                        <div class="contact__info-item">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-address-icon.svg" alt="" class="contact__info-item-image">
+                            <p class="contact__info-item-title">OUR ADDRESS</p>
+                            <p class="contact__info-item-paragraph"> plot no.7   – near axis bank <br> kaithalroad, cheeka, Haryana</p>
+                        </div>
+                        <div class="contact__info-item">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-phone-icon.svg" alt="" class="contact__info-item-image">
+                            <p class="contact__info-item-title">OUR PHONE NUMBER</p>
+                            <p class="contact__info-item-paragraph"><a href="+91 9034354900">+91 9034354900</a><br>
+                                <a href="tel:+1 (212) 668-0692">+91 9034354900</a></p>
+                        </div>
+                        <div class="contact__info-item">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-hours-icon.svg" alt="" class="contact__info-item-image">
+                            <p class="contact__info-item-title">OUR OFFICE HOURS</p>
+                            <p class="contact__info-item-paragraph">Monday-Friday: 9am to 5pm</p>
+                        </div>
+                        <div class="contact__info-item">
+                            <img src="https://www.canamenterprises.com/wp-content/uploads/2023/12/canam-email-icon.svg" alt="" class="contact__info-item-image">
+                            <p class="contact__info-item-title">OUR EMAIL</p>
+                            <p class="contact__info-item-paragraph"><a href="#">khullarakshay723@gmail.com</a><br>
+                                <a href="mailto:ir@canamenterprises.com">khullarakshay723@gmail.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            </div>
+        </div>
+
+                    
+    </dialog>
+    
+
+
+    <link rel='stylesheet' id='contact-form-7-css' href='https://www.canamenterprises.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=5.9.8' media='all' />
+    <script type="rocketlazyloadscript" id="rocket-browser-checker-js-after">
+        "use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i
+        <props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0, "value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return
+            function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance
+            instanceof Constructor))throw new TypeError( "Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return
+            _createClass(RocketBrowserCompatibilityChecker,[{key: "_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener( "test",null,options),window.removeEventListener(
+            "test",null,options)}catch(err){self.passiveSupported=!1}}},{key: "initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return
+            Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key: "isDataSaverModeOn",value:function(){return "connection"in navigator&&!0===navigator.connection.saveData}},{key:
+            "supportsLinkPrefetch",value:function(){var elem=document.createElement( "link");return elem.relList&&elem.relList.supports&&elem.relList.supports( "prefetch")&&window.IntersectionObserver&& "isIntersecting"in IntersectionObserverEntry.prototype}},{key:
+            "isSlowConnection",value:function(){return "connection"in navigator&& "effectiveType"in navigator.connection&&( "2g"===navigator.connection.effectiveType|| "slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}(); </script>
+            <script id="rocket-preload-links-js-extra">
+                var RocketPreloadLinksConfig = {
+                    "excludeUris": "\/(?:.+\/)?feed(?:\/(?:.+\/?)?)?$|\/(?:.+\/)?embed\/|\/(index.php\/)?(.*)wp-json(\/.*|$)|\/refer\/|\/go\/|\/recommend\/|\/recommends\/",
+                    "usesTrailingSlash": "1",
+                    "imageExt": "jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php",
+                    "fileExt": "jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php|html|htm",
+                    "siteUrl": "https:\/\/www.canamenterprises.com",
+                    "onHoverDelay": "100",
+                    "rateThrottle": "3"
+                };
+            </script>
+            <script type="rocketlazyloadscript" id="rocket-preload-links-js-after">
+                (function() { "use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e=function(){function
+                i(e,t){for(var n=0;n
+                <t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0, "value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}}();function
+                    i(e,t){if(!(e instanceof t))throw new TypeError( "Cannot call a class as a function")}var t=function(){function n(e,t){i(this,n),this.browser=e,this.config=t,this.options=this.browser.options,this.prefetched=new Set,this.eventTime=null,this.threshold=1111,this.numOnHover=0}return
+                    e(n,[{key: "init",value:function(){!this.browser.supportsLinkPrefetch()||this.browser.isDataSaverModeOn()||this.browser.isSlowConnection()||(this.regex={excludeUris:RegExp(this.config.excludeUris, "i"),images:RegExp( ".("+this.config.imageExt+
+                    ")$", "i"),fileExt:RegExp( ".("+this.config.fileExt+ ")$", "i")},this._initListeners(this))}},{key: "_initListeners",value:function(e){-1<this.config.onHoverDelay&&document.addEventListener( "mouseover",e.listener.bind(e),e.listenerOptions),document.addEventListener(
+                    "mousedown",e.listener.bind(e),e.listenerOptions),document.addEventListener( "touchstart",e.listener.bind(e),e.listenerOptions)}},{key: "listener",value:function(e){var t=e.target.closest( "a"),n=this._prepareUrl(t);if(null!==n)switch(e.type){case
+                    "mousedown":case "touchstart":this._addPrefetchLink(n);break;case "mouseover":this._earlyPrefetch(t,n, "mouseout")}}},{key: "_earlyPrefetch",value:function(t,e,n){var i=this,r=setTimeout(function(){if(r=null,0===i.numOnHover)setTimeout(function(){return
+                    i.numOnHover=0},1e3);else if(i.numOnHover>i.config.rateThrottle)return;i.numOnHover++,i._addPrefetchLink(e)},this.config.onHoverDelay);t.addEventListener(n,function e(){t.removeEventListener(n,e,{passive:!0}),null!==r&&(clearTimeout(r),r=null)},{passive:!0})}},{key:"_addPrefetchLink",value:function(i){return
+                    this.prefetched.add(i.href),new Promise(function(e,t){var n=document.createElement("link");n.rel="prefetch",n.href=i.href,n.onload=e,n.onerror=t,document.head.appendChild(n)}).catch(function(){})}},{key:"_prepareUrl",value:function(e){if(null===e||"object"!==(void
+                    0===e?"undefined":r(e))||!1 in e||-1===["http:","https:"].indexOf(e.protocol))return null;var t=e.href.substring(0,this.config.siteUrl.length),n=this._getPathname(e.href,t),i={original:e.href,protocol:e.protocol,origin:t,pathname:n,href:t+n};return
+                    this._isLinkOk(i)?i:null}},{key:"_getPathname",value:function(e,t){var n=t?e.substring(this.config.siteUrl.length):e;return n.startsWith("/")||(n="/"+n),this._shouldAddTrailingSlash(n)?n+"/":n}},{key:"_shouldAddTrailingSlash",value:function(e){return
+                    this.config.usesTrailingSlash&&!e.endsWith("/")&&!this.regex.fileExt.test(e)}},{key:"_isLinkOk",value:function(e){return null!==e&&"object"===(void 0===e?"undefined":r(e))&&(!this.prefetched.has(e.href)&&e.origin===this.config.siteUrl&&-1===e.href.indexOf("?")&&-1===e.href.indexOf("#")&&!this.regex.excludeUris.test(e.href)&&!this.regex.images.test(e.href))}}],[{key:"run",value:function(){"undefined"!=typeof
+                    RocketPreloadLinksConfig&&new n(new RocketBrowserCompatibilityChecker({capture:!0,passive:!0}),RocketPreloadLinksConfig).init()}}]),n}();t.run(); }());
+            </script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.google.com/recaptcha/api.js?render=6LdyUf4pAAAAAEGt0fTxmBvVPP2fdJMG7wmz87vL&amp;ver=3.0" id="google-recaptcha-js"></script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-includes/js/dist/vendor/wp-polyfill-inert.min.js?ver=3.1.2" id="wp-polyfill-inert-js"></script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-includes/js/dist/vendor/regenerator-runtime.min.js?ver=0.14.0" id="regenerator-runtime-js"></script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" id="wp-polyfill-js"></script>
+            <script id="wpcf7-recaptcha-js-extra">
+                var wpcf7_recaptcha = {
+                    "sitekey": "6LdyUf4pAAAAAEGt0fTxmBvVPP2fdJMG7wmz87vL",
+                    "actions": {
+                        "homepage": "homepage",
+                        "contactform": "contactform"
+                    }
+                };
+            </script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=5.9.8" id="wpcf7-recaptcha-js"></script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-includes/js/dist/hooks.min.js?ver=2810c76e705dd1a53b18" id="wp-hooks-js"></script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+            <script type="rocketlazyloadscript" id="wp-i18n-js-after">
+                wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+            </script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=5.9.8" id="swv-js"></script>
+            <script id="contact-form-7-js-extra">
+                var wpcf7 = {
+                    "api": {
+                        "root": "https:\/\/www.canamenterprises.com\/wp-json\/",
+                        "namespace": "contact-form-7\/v1"
+                    }
+                };
+            </script>
+            <script type="rocketlazyloadscript" data-rocket-src="https://www.canamenterprises.com/wp-content/plugins/contact-form-7/includes/js/index.js?ver=5.9.8" id="contact-form-7-js"></script>
+            <style>
+                .otgs-development-site-front-end a {
+                    color: white;
+                }
+
+                .otgs-development-site-front-end .icon {
+                    background: url(https://www.canamenterprises.com/wp-content/plugins/sitepress-multilingual-cms/vendor/otgs/installer//res/img/icon-wpml-info-white.svg) no-repeat;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    position: absolute;
+                    margin-left: -23px;
+                }
+
+                .otgs-development-site-front-end {
+                    background-size: 32px;
+                    padding: 22px 0px;
+                    font-size: 12px;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+                    line-height: 18px;
+                    text-align: center;
+                    color: white;
+                    background-color: #33879E;
+                }
+            </style>
+            <div class="otgs-development-site-front-end"><span class="icon"></span>This site is registered on <a href="https://wpml.org">wpml.org</a> as a development site. Switch to a production site key to <a href="https://wpml.org/faq/how-to-remove-the-this-site-is-registered-on-wpml-org-as-a-development-site-notice/">remove this banner</a>.</div>
+            <script>
+                window.lazyLoadOptions = {
+                    elements_selector: "iframe[data-lazy-src]",
+                    data_src: "lazy-src",
+                    data_srcset: "lazy-srcset",
+                    data_sizes: "lazy-sizes",
+                    class_loading: "lazyloading",
+                    class_loaded: "lazyloaded",
+                    threshold: 300,
+                    callback_loaded: function(element) {
+                        if (element.tagName === "IFRAME" && element.dataset.rocketLazyload == "fitvidscompatible") {
+                            if (element.classList.contains("lazyloaded")) {
+                                if (typeof window.jQuery != "undefined") {
+                                    if (jQuery.fn.fitVids) {
+                                        jQuery(element).parent().fitVids()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+                window.addEventListener('LazyLoad::Initialized', function(e) {
+                    var lazyLoadInstance = e.detail.instance;
+                    if (window.MutationObserver) {
+                        var observer = new MutationObserver(function(mutations) {
+                            var image_count = 0;
+                            var iframe_count = 0;
+                            var rocketlazy_count = 0;
+                            mutations.forEach(function(mutation) {
+                                for (var i = 0; i < mutation.addedNodes.length; i++) {
+                                    if (typeof mutation.addedNodes[i].getElementsByTagName !== 'function') {
+                                        continue
+                                    }
+                                    if (typeof mutation.addedNodes[i].getElementsByClassName !== 'function') {
+                                        continue
+                                    }
+                                    images = mutation.addedNodes[i].getElementsByTagName('img');
+                                    is_image = mutation.addedNodes[i].tagName == "IMG";
+                                    iframes = mutation.addedNodes[i].getElementsByTagName('iframe');
+                                    is_iframe = mutation.addedNodes[i].tagName == "IFRAME";
+                                    rocket_lazy = mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');
+                                    image_count += images.length;
+                                    iframe_count += iframes.length;
+                                    rocketlazy_count += rocket_lazy.length;
+                                    if (is_image) {
+                                        image_count += 1
+                                    }
+                                    if (is_iframe) {
+                                        iframe_count += 1
+                                    }
+                                }
+                            });
+                            if (image_count > 0 || iframe_count > 0 || rocketlazy_count > 0) {
+                                lazyLoadInstance.update()
+                            }
+                        });
+                        var b = document.getElementsByTagName("body")[0];
+                        var config = {
+                            childList: !0,
+                            subtree: !0
+                        };
+                        observer.observe(b, config)
+                    }
+                }, !1)
+            </script>
+            <script data-no-minify="1" async src="https://www.canamenterprises.com/wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js"></script>
+            <script type="rocketlazyloadscript" data-no-optimize="1">window['theme_directory'] = "https://www.canamenterprises.com/wp-content/themes/canam_wp_theme-main";</script>
+            <script type="rocketlazyloadscript" defer data-rocket-type="text/javascript" data-rocket-src="https://www.canamenterprises.com/wp-content/themes/canam_wp_theme-main/js/slider.js"></script>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const counters = document.querySelectorAll('.banner__item-figure');
+        
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target'); // Get the target number
+                        let count = 0; // Start from 0
+                        const increment = Math.ceil(target / 100); // Increment value
+                        const duration = 2000; // Duration of the animation in milliseconds
+                        const intervalTime = Math.floor(duration / (target / increment)); // Calculate interval time
+        
+                        const updateCount = () => {
+                            if (count < target) {
+                                count += increment;
+                                if (count > target) count = target; // Ensure we don't exceed the target
+                                counter.textContent = count + (counter.textContent.includes('%') ? '%' : '+');
+                                setTimeout(updateCount, intervalTime);
+                            } else {
+                                counter.textContent = target + (counter.textContent.includes('%') ? '%' : '+'); // Final set
+                            }
+                        };
+        
+                        updateCount(); // Start the count
+                    });
+                });
+            </script>
+
+        </body>
+
+</html>
+
+<!-- This website is like a Rocket, isn't it? Performance optimized by WP Rocket. Learn more: https://wp-rocket.me -->
